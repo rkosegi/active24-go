@@ -19,6 +19,7 @@ package active24
 import (
 	"fmt"
 	"io"
+	"k8s.io/klog/v2"
 	"net/http"
 	"time"
 )
@@ -47,9 +48,9 @@ type ApiError interface {
 }
 
 type Client interface {
-	//Dns provides interface to interact with DNS records
+	// Dns provides interface to interact with DNS records
 	Dns() Dns
-	//Domains provides interface to interact with domains
+	// Domains provides interface to interact with domains
 	Domains() Domains
 }
 
@@ -61,6 +62,7 @@ func New(apiKey string, opts ...Option) Client {
 			c: http.Client{
 				Timeout: time.Second * 10,
 			},
+			l: klog.NewKlogr(),
 		},
 	}
 	for _, opt := range opts {
@@ -102,6 +104,7 @@ type helper struct {
 	apiEndpoint string
 	auth        string
 	c           http.Client
+	l           klog.Logger
 }
 
 func (ch *helper) do(method string, suffix string, body io.Reader) (*http.Response, error) {
@@ -111,7 +114,8 @@ func (ch *helper) do(method string, suffix string, body io.Reader) (*http.Respon
 	}
 	r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", ch.auth))
 	r.Header.Set("Content-Type", "application/json")
-	r.Header.Set("Accept", "*/*")
+	r.Header.Set("Accept", "application/json")
+	ch.l.V(4).Info("Calling API", "method", method, "url", r.URL.String())
 	return ch.c.Do(r)
 }
 
