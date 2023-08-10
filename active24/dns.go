@@ -42,11 +42,11 @@ const (
 
 type DnsDomainList []string
 
-//Dns provides a way to interact with DNS domains
+// Dns provides a way to interact with DNS domains
 type Dns interface {
-	//List returns a list of domains which have DNS records managed by Active 24.
+	// List returns a list of domains which have DNS records managed by Active 24.
 	List() (DnsDomainList, ApiError)
-	//With returns interface to interact with DNS records in given domain
+	// With returns interface to interact with DNS records in given domain
 	With(domain string) DnsRecordActions
 }
 
@@ -77,13 +77,13 @@ type DnsRecord struct {
 
 // DnsRecordActions allows interaction with DNS records
 type DnsRecordActions interface {
-	//Create creates a new DNS record
+	// Create creates a new DNS record
 	Create(DnsRecordType, *DnsRecord) ApiError
-	//List lists all DNS records in this domain.
+	// List lists all DNS records in this domain.
 	List() ([]DnsRecord, ApiError)
-	//Update updates an existing DNS record
+	// Update updates an existing DNS record
 	Update(DnsRecordType, *DnsRecord) ApiError
-	//Delete removes single DNS record based on its hash ID
+	// Delete removes single DNS record based on its hash ID
 	Delete(string) ApiError
 }
 
