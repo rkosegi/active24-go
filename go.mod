@@ -18,7 +18,7 @@ go 1.21
 
 require (
 	github.com/stretchr/testify v1.9.0
-	k8s.io/klog/v2 v2.130.0
+	k8s.io/klog/v2 v2.130.1
 )
 
 require (
